@@ -17,7 +17,7 @@ public class User {
     @NotBlank(message = "The field cannot be empty")
     @Column(name = "name")
     private String name;
-    @NotBlank()
+
 
 
     @NotBlank(message = "The field cannot be empty")
