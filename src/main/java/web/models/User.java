@@ -1,9 +1,9 @@
 package web.models;
 
-import org.springframework.stereotype.Component;
-
 import javax.persistence.*;
-
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "user")
@@ -11,18 +11,26 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    private int id;
 
-    @Column(name="name")
+
+    @NotBlank(message = "The field cannot be empty")
+    @Column(name = "name")
     private String name;
+    @NotBlank()
 
-    @Column(name="surname")
+
+    @NotBlank(message = "The field cannot be empty")
+    @Column(name = "surname")
     private String surname;
 
-    @Column(name="email")
+    @Column(name = "email")
+    @NotBlank(message = "The field is empty or the email format is incorrect")
+    @Email(message = "The field is empty or the email format is incorrect")
     private String email;
 
-    public User() {}
+    public User() {
+    }
 
     public User(String name, String surname, String email) {
         this.name = name;
@@ -57,7 +65,6 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-
 
     @Override
     public String toString() {
