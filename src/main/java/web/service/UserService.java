@@ -1,56 +1,47 @@
 package web.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import web.dao.UserDao;
 import web.models.User;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
 public class UserService {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    @Autowired
+    private UserDao userDao;
 
+    @Autowired
+    public UserService(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     @Transactional
     public void saveUserButton(User user) {
-        entityManager.persist(user);
+        userDao.saveUserButton(user);
     }
-
 
     @Transactional
     public List<User> getUsers() {
-        String jpql = "SELECT u FROM User u";
-        return entityManager.createQuery(jpql, User.class).getResultList();
+        return userDao.getUsers();
     }
-
 
     @Transactional
     public User getUserById(int id) {
-        return entityManager.find(User.class, id);
+        return userDao.getUserById(id);
     }
 
     @Transactional
-    public void updateUser(int id, User updateduser) {
-
-        User userToBeUpdated = getUserById(id);
-
-        if (userToBeUpdated != null) {
-            userToBeUpdated.setName(updateduser.getName());
-            userToBeUpdated.setSurname(updateduser.getSurname());
-            userToBeUpdated.setEmail(updateduser.getEmail());
-
-            entityManager.merge(userToBeUpdated);
-        }
+    public void updateUser(int id, User updatedUser) {
+        userDao.updateUser(id, updatedUser);
     }
 
     @Transactional
     public void deleteUser(int id) {
-
-        entityManager.remove(getUserById(id));
-
+        userDao.deleteUser(id);
     }
 }
